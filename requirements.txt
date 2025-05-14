@@ -16,6 +16,7 @@ faiss-cpu
 langchain_chroma
 duckdb
 pandas
+pysqlite3-binary
 openai
 langchain-groq
 duckduckgo-search
