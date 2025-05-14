@@ -1,3 +1,4 @@
+import patch_sqlite
 import streamlit as st
 from Agents.Coding_agent import coding_interpreter_agent
 from Agents.Flash_card_agent import FlashCardAgent
