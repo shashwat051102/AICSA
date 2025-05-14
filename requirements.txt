@@ -15,6 +15,7 @@ langchain_huggingface
 faiss-cpu
 crewai[tools]
 langchain_chroma
+ollama
 duckdb
 pandas
 pysqlite3-binary
