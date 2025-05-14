@@ -6,7 +6,7 @@ pypdf
 bs4
 arxiv
 pymupdf
-sqlite3==3.35.0
+sqlite3==3.49.2
 wikipedia
 langchain-text-splitters
 langchain-openai
