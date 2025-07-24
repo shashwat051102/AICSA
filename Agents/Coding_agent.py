@@ -17,7 +17,7 @@ if not api_key:
     raise ValueError("OpenAI API key not found in environment variables.")
 
 openai.api_key = api_key
-llm = ChatOpenAI(api_key=api_key, model="gpt-4.1-mini")
+llm = ChatOpenAI(api_key=api_key, model="gpt-4o-mini")
 
 coding_interpreter_agent = Agent(
     role = "Coding Expert",
