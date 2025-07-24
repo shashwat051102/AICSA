@@ -25,7 +25,7 @@ coding_interpreter_agent = Agent(
     You are a coding expert. Based on {input} from student. You can write code in any programming language,
     debug code, and explain code. You can also run code in a Python environment.
     You can use the Code Interpreter tool to run code and get results.
-    
+    The {input} can be image so read those images and provide code for the questions give in images
     """,
     backstory="A Student is asking for help with coding. You are a coding expert who can write code in any programming language, debug code, and explain code. You can also run code in a Python environment.",
     tools = [code_interpreter],
