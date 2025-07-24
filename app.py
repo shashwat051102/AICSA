@@ -46,6 +46,7 @@ if task == "Coding Task":
         input = st.text_area("Enter your coding task:", help="Type your coding question or task here.")
     elif choice == "Image":
         input = st.file_uploader("Upload an image of your coding task:", type=["jpg", "jpeg", "png"], help="Upload an image containing your coding question or task.")
+        input = input.getvalue().decode("utf-8")
     if st.button("🚀 Submit"):
         with st.spinner("Processing your coding task..."):
             crew = Crew(agents = [coding_interpreter_agent], tasks = [Coding_interpreter_task], memory = False)
