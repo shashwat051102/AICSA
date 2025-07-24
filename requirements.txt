@@ -5,7 +5,9 @@ langchain-community
 pypdf
 PyPDF2
 xhtml2pdf
-pytesseract
+tesseract-ocr
+tesseract-ocr-eng
+libtesseract-dev
 Markdown
 bs4
 arxiv
