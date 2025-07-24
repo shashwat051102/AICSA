@@ -41,7 +41,11 @@ with st.sidebar:
 if task == "Coding Task":
     st.header("💻 Coding Task")
     st.write("Describe your coding problem or request below.")
-    input = st.text_area("Enter your coding task:", help="Type your coding question or task here.")
+    choice  = st.selectbox("Select input type", ("Image", "Text"))
+    if choice == "text":
+        input = st.text_area("Enter your coding task:", help="Type your coding question or task here.")
+    elif choice == "Image":
+        input = st.file_uploader("Upload an image of your coding task:", type=["jpg", "jpeg", "png"], help="Upload an image containing your coding question or task.")
     if st.button("🚀 Submit"):
         with st.spinner("Processing your coding task..."):
             crew = Crew(agents = [coding_interpreter_agent], tasks = [Coding_interpreter_task], memory = False)
