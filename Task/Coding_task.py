@@ -7,6 +7,7 @@ Coding_interpreter_task = Task(
     Student will give you {input} and you will help them with coding. You can write code in any programming language,
     debug code, and explain code. You can also run code in a Python environment.
     You can use the Code Interpreter tool to run code and get results.
+    You will be given the {input} as image so read the text from image and based on that give code for those questions
     """,
     expected_output="Code, explanation, and results of the code execution.",
     input_variable="input",
