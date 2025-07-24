@@ -5,6 +5,7 @@ langchain-community
 pypdf
 PyPDF2
 xhtml2pdf
+pytesseract
 Markdown
 bs4
 arxiv
