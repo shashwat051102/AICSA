@@ -8,8 +8,8 @@ xhtml2pdf
 tesseract-ocr
 tesseract-ocr-eng
 libtesseract-dev
+rich<14.0.0
 embedchain==0.1.128
-rich==13.7.1
 Markdown
 bs4
 arxiv
