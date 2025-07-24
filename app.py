@@ -16,6 +16,15 @@ from Utils.Extract_text import extract_text_from_pdf
 from Utils.Download import download_pdf_report
 from crewai import Crew
 
+# --- Import libraries for image processing ---
+from PIL import Image
+import pytesseract
+
+# If Tesseract is not in your system's PATH, you might need to specify the path.
+# For example, on Windows:
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+
 st.set_page_config(page_title="AI Career & Study Assistant (AICSA)", page_icon=":rocket:", layout="wide")
 
 # --- Header ---
@@ -41,23 +50,43 @@ with st.sidebar:
 if task == "Coding Task":
     st.header("💻 Coding Task")
     st.write("Describe your coding problem or request below.")
-    choice  = st.selectbox("Select input type", ("Image", "Text"))
-    if choice == "text":
-        input = st.text_area("Enter your coding task:", help="Type your coding question or task here.")
+    choice = st.selectbox("Select input type", ("Text", "Image"))
+    
+    user_input = None
+    if choice == "Text":
+        user_input = st.text_area("Enter your coding task:", help="Type your coding question or task here.")
     elif choice == "Image":
-        input = st.file_uploader("Upload an image of your coding task:", type=["jpg", "jpeg", "png"], help="Upload an image containing your coding question or task.")
-        # input = input.getvalue().decode("utf-8")
+        user_input = st.file_uploader("Upload an image of your coding task:", type=["jpg", "jpeg", "png"])
+
     if st.button("🚀 Submit"):
-        with st.spinner("Processing your coding task..."):
-            crew = Crew(agents = [coding_interpreter_agent], tasks = [Coding_interpreter_task], memory = False)
-            result = crew.kickoff(
-                {
-                    "input": input,
-                }
-            )
-            st.success("Task completed!")
-            st.markdown(result)
-            download_pdf_report(result, "coding_task")
+        if not user_input:
+            st.warning("Please provide an input (text or image) before submitting.")
+        else:
+            with st.spinner("Processing your coding task..."):
+                final_input_str = ""
+                if choice == "Text":
+                    final_input_str = user_input
+                elif choice == "Image":
+                    try:
+                        # Open the uploaded image file
+                        image = Image.open(user_input)
+                        # Use pytesseract to perform OCR and extract text
+                        final_input_str = pytesseract.image_to_string(image)
+                        if not final_input_str.strip():
+                             st.error("Could not extract any text from the image. Please ensure the image is clear and contains machine-readable text.")
+                             st.stop()
+                    except Exception as e:
+                        st.error(f"An error occurred while processing the image: {e}")
+                        st.stop()
+
+                # Kick off the crew with the extracted string
+                crew = Crew(agents=[coding_interpreter_agent], tasks=[Coding_interpreter_task], memory=False)
+                result = crew.kickoff({"input": final_input_str})
+                
+                st.success("Task completed!")
+                st.markdown(result)
+                download_pdf_report(result, "coding_task")
+
 elif task == "Flash Card Task":
     st.header("📚 Flash Card Task")
     Method_input = st.selectbox("Select a method", ("PDF", "Website"))
@@ -74,7 +103,6 @@ elif task == "Flash Card Task":
                     crew = Crew(agents = [FlashCardAgent], tasks = [FlashCard_task],memory = False)
                     result = crew.kickoff(
                         {
-                            
                             "extracted_text": extracted_text
                         }
                     )
@@ -111,7 +139,6 @@ elif task == "Note Making Task":
                 with st.spinner("Processing..."):
                     try:
                         extracted_text = extract_text_from_pdf(method)
-                        # st.text_area("Extracted Text", extracted_text, height=300)
                         crew = Crew(agents = [NoteMakingAgent], tasks = [NoteMaking_task],memory = False)
                         result = crew.kickoff({"extracted_text": extracted_text})
                         st.success("Task completed!")
@@ -146,7 +173,6 @@ if task == "Summary Task":
                 with st.spinner("Processing..."):
                     try:
                         extracted_text = extract_text_from_pdf(method)
-                        # st.text_area("Extracted Text", extracted_text, height=300)
                         crew = Crew(agents = [Summary_agent], tasks = [Summary_task],memory = False)
                         result = crew.kickoff({"extracted_text": extracted_text})
                         st.success("Task completed!")
@@ -181,7 +207,6 @@ elif task == "Quiz Task":
                 with st.spinner("Processing..."):
                     try:
                         extracted_text = extract_text_from_pdf(method)
-                        # st.text_area("Extracted Text", extracted_text, height=300)
                         crew = Crew(agents = [Quiz_agent], tasks = [Quizz_task],memory = False)
                         result = crew.kickoff({"extracted_text": extracted_text})
                         st.success("Task completed!")
